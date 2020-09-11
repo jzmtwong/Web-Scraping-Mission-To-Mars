@@ -14,7 +14,7 @@ def init_browser():
     return Browser("chrome", **executable_path, headless=False)
 
 
-def scrape_info():
+def scrape_news():
     # NASA MARS NEWS
 
     # initialize browser
@@ -37,8 +37,13 @@ def scrape_info():
 
     # stop browser
     browser.quit()
+    return mars_data
 
+def scrape_image():
     # FEATURED IMAGE
+
+    # initialize browser
+    browser = init_browser()
 
     # visit Mars Space Images url
     featured_image_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
@@ -60,12 +65,20 @@ def scrape_info():
     mars_data['image_url'] = image_url
     # stop browser
     browser.quit()
+    return mars_data
 
+def scrape_facts():
     # MARS FACTS
+
+    # initialize browser
+    browser = init_browser()
+
     # visit website for mars facts
-    facts_url = 'http://space-facts.com/mars/'
+    facts_url = 'https://space-facts.com/mars/'
     browser.visit(facts_url)
-    time.sleep(10)
+    time.sleep(5)
+
+
 
     # parse the URL using pandas
     tables = pd.read_html(facts_url)
@@ -80,8 +93,13 @@ def scrape_info():
     mars_data['tables'] = html_table
     # stop browser
     browser.quit()
+    return mars_data
 
+def scrape_hem():
     # Mars Hemisphere
+
+    # initialize browser
+    browser = init_browser()
 
     # Visit hemispheres website
     hemispheres_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
@@ -90,7 +108,7 @@ def scrape_info():
     # html browser
     html_hemispheres = browser.html
     soup = bs(html_hemispheres, 'html.parser')
-    time.sleep(15)
+    time.sleep(5)
 
     # retreive all items that contain mars hemispheres information
     items = soup.find_all('div', class_='item')
@@ -134,5 +152,8 @@ def scrape_info():
 
 
 #####################################################################################
-
-
+#scrape_news()
+#scrape_image()
+#scrape_facts()
+scrape_hem()
+print(mars_data)
